@@ -1,0 +1,40 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+# 작성자 : 한석현
+import sys
+import os
+import commands
+
+def check():
+	print "hello world"
+	print 0%4
+	print 1%4
+	print 2%4
+	print 3%4
+	print 4%4
+
+	fastq = ['','','','']
+	print "['','','','']"
+	print "Result==>"
+	print fastq
+	print "-----------------------"
+
+	idx = 3
+	fastq[idx] = "AAAA"
+	print "list index add"
+	print "Result==>"
+	print fastq
+	print "-----------------------"
+	
+	tmp_l =[0]*len(fastq[3])
+	print tmp_l	
+	
+	f_list = [0 for i in range(4)]
+	print f_list
+	e =2
+	e+=1
+	print ("1+%s"%e)
+
+if __name__ == '__main__':
+	check()

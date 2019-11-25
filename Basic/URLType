@@ -1,0 +1,25 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+# 작성자 : 한석현
+
+import sys
+import os
+import commands
+import urllib
+import re
+
+def check():
+       # f = urlib.urlopen("/usr/bin/last.org -wF")http://web.cs.gwnu.ac.kr/bbs/index.php?document_srl=489&mid=notice
+      #  f = urllib.urlopen("http://web.cs.gwnu.ac.kr/bbs/index.php?document_srl=489/")
+       # data = urllib.urlencode({"find":"XMLForms", "findtype":"t"})
+	f = urllib.urlopen("http://web.cs.gwnu.ac.kr/bbs/index.php?document_srl=489&mid=notice").read()
+#	pattern = '<div class="boardReadBody"></div>'
+#	match = re.search(pattern, f)
+#	s = match.group(3)
+	print f
+        
+#	f.close()
+
+if __name__ == '__main__':
+        check()

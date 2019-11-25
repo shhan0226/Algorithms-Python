@@ -1,0 +1,16 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+# 작성자 : 한석현
+import sys
+import os
+import commands
+
+def check():
+	l = [10, 20, 30]
+	for i, v in enumerate(l,100):
+		print(i,v)
+
+
+if __name__ == '__main__':
+	check()

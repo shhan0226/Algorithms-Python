@@ -1,0 +1,10 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+#작성자 한석현
+
+def check():
+	print "hello"
+
+if __name__ == '__main__':
+	check()
