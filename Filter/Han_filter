@@ -1,0 +1,168 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+# 작성자 : 한석현
+import sys
+import os
+import commands
+import optparse
+
+
+VER = "1.0"
+
+total = 0
+#총 몇줄 읽는지
+
+remove = 0
+#총 몇줄 지웠는지
+
+
+def CHECK(total, remove):
+	reserch = "This is script is pre-processing a file of FASTQ format before running an assembler"
+	#명령 옵션 파서를 생성하고 optionpaser인스턴스 반환(도움말 보여줄 설명 문자열, 옵션전달 출력 문자열)
+	p = optparse.OptionParser(description=reserch, version = "%prog version"+VER, usage= "Usage: filter_reads [options] input_file_name output_file_name")	
+
+	#인수를 받아들이는 옵션(옵션, 받아들이기, 옵션값저장속성, 옵션타입, 디폴트, 옵션도움말)
+	p.add_option("-l", action="store",dest="option_min", type="int", default="0", help="minimum length of contig")
+	p.add_option("-s", action="store",dest="option_start", type="int", default="0", help="cut bases from the start")
+	p.add_option("-e", action="store",dest="option_end", type="int", default="0", help="cut bases from the end")
+	p.add_option("-w", action="store",dest="option_window", type="int", default="0", help="calculate means using a sliding window, where the smallest mean is returned. Default = 0, which means not using sliding window")
+	p.add_option("-a", action="store",dest="option_avg", type="int", default="0", help="gnore reads where the average quality is below the cutoff. When window_size is applied, the avg_quality is the average within a window.")
+	p.add_option("-f", action="store",dest="option_format", type="choice", choices=['sanger', 'solexa','illumina'], default="sanger", help="anger = Phred quality score from 0 to 93 using ASCII 33 to 126, solexa = Solexa/Illumina quality score from -5 to 62 using ASCII 59 to 126, illumina = Phred quality score from 0 to 62 using ASCII 64 to 126. Default = sanger")
+
+	#기본값 설정
+	p.set_defaults(debug=False)
+	
+	#명령줄을 파싱(opt는 옵션값 객체, args는 옵션이 아닌 항목 리스트)
+	opts, args = p.parse_args()
+
+	if len(sys.argv) == 1:
+		p.print_help()
+		sys.exit(1)
+	if len(args) != 2:
+		p.print_help("NO input_file_name & outout_file_name!")
+		sys.exit(1)
+
+
+	input_file = args[0]
+	output_file = args[1]
+	try:
+		f = open(input_file, "r")
+	except IOError:
+		print "There is no %s file" %input_file
+		sys.exit(1)
+	
+	w = open(output_file, "w")
+	count = 0
+
+	file_read = ['', '', '', '']
+	#4줄 기준으로 읽기
+	print "START!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+	for file_line in f.readlines():
+		if file_line =="":
+			continue
+		total += 1
+		#파일 읽어 리스트저장
+		file_read[count] = file_line.strip()
+		
+		#옵션처리
+		if opts.option_min != 0:
+			file_read = CHECK_OPTION_MIN(file_read, opts)
+
+		if opts.option_start !=0:
+			file_read = CHECK_OPTION_START(file_read, opts)
+		
+		if opts.option_end !=0:
+			file_read = CHECK_OPTION_END(file_read, opts)
+
+
+		if opts.option_window != 0 or opts.option_avg !=0:
+			file_read = CHECK_OPTION_AVG_WINDOW(file_read, opts)
+					
+
+
+		if count == 3:	
+			count = 0
+			if file_read[3] != '':
+				w.write("%s\n%s\n%s\n%s\n" %(file_read[0].strip(), file_read[1].strip(), file_read[2].strip(), file_read[3].strip()))
+				continue
+			else:
+				remove += 1
+				continue
+		count +=1
+
+			
+	print "Total number of reads :  %s" %total
+	print "Total number of removed read: %s (%s%%)\n " %(remove, round(100*(float(remove)/float(total) ) ,2))
+
+
+def CHECK_OPTION_START(file_read, opts):
+	file_read[1] = file_read[1][opts.option_start:]
+	file_read[3] = file_read[3][opts.option_start:]
+	return file_read
+
+def CHECK_OPTION_END(file_read, opts):
+	file_read[1] = file_read[1][:opts.option_end]
+	file_read[3] = file_read[3][:opts.option_end]
+	return file_read
+
+def CHECK_OPTION_AVG_WINDOW(file_read, opts):	
+	read_format = { "sanger" : [33,126], "solexa" : [59,126], "illumina" : [64,126] }
+	#포멧 종류
+	read_count = len(file_read[3])
+	#읽은 길이 개수
+
+	if opts.option_window > read_count:
+		file_read[3] = ''
+		return file_read
+	
+	r_list = [0 for i in range(read_count)]
+	#읽은 개수 만큼 리스트 초기화
+
+	if read_count == 0:
+		file_read[3] = ''
+		return file_read
+
+	for i in range(0, read_count):
+		asci = ord(file_read[3][i])
+		if asci >= read_format[opts.option_format][0] and asci <= read_format[opts.option_format][1]:
+			r_list[i] = asci - read_format[opts.option_format][0]
+		else:
+			print "Error : %s in infile not the format of %s " %(file_read[3][i], opts.option_format)
+			sys.exit(1)
+
+	total_sum = sum(r_list)
+	total_avg = total_sum / read_count
+
+	if opts.option_window == 0 :
+		if opts.option_avg > total_avg:	
+			file_read[3] = ''
+			return file_read
+		return file_read
+	else:
+		min_avg = -1
+		for i in range(0, read_count):
+			if i+opts.option_window > read_count:
+				break
+			total_sum_window = sum(r_list[i:i+opts.option_window])
+			total_avg_window = total_sum_window / opts.option_window
+
+			if min_avg == -1 or min_avg > total_avg_window:
+				min_avg = total_avg_window
+			
+		if min_avg < opts.option_avg:
+			file_read[3] = ''
+			return file_read
+		return file_read
+
+def CHECK_OPTION_MIN(file_read, opts):
+	if opts.option_min >= len(file_read[3]):
+		file_read[3] = ''
+		return file_read
+		
+	else:
+		return file_read
+	
+if __name__ == '__main__':
+	CHECK(total, remove)

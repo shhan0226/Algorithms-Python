@@ -1,0 +1,151 @@
+#!/usr/bin/python
+
+import os
+import sys
+import optparse
+
+VERSION = "1.0"
+
+
+def CHECK_OPTS():
+	desc="This script is pre-processing a file of FASTQ format before running an assembler" 
+
+	parser = optparse.OptionParser(description=desc, version='%prog version '+VERSION, usage='Usage: %prog [options] input_file_name output_file_name')
+
+	parser.add_option('-l', dest='min_ctg_length', type='int', default='0', help='minimum length of contig', action='store')
+	parser.add_option('-s', dest='trim_start', type='int', default='0', help='cut bases from the start', action='store')
+	parser.add_option('-e', dest='trim_end', type='int', default='0', help='cut bases from the end', action='store')
+	parser.add_option('-w', dest='window_size', type='int', default='0', help='calculate means using a sliding window, where the smallest mean is returned. Default = 0, which means not using sliding window.', action='store')
+	parser.add_option('-a', dest='avg_quality', type='int', default='0', help='ignore reads where the average quality is below the cutoff. When window_size is applied, the avg_quality is the average within a window.', action='store')
+	parser.add_option('-f', dest='fast_format', type='choice', choices=['sanger','solexa','illumina'], default='sanger', help='sanger = Phred quality score from 0 to 93 using ASCII 33 to 126, solexa = Solexa/Illumina quality score from -5 to 62 using ASCII 59 to 126, illumina = Phred quality score from 0 to 62 using ASCII 64 to 126. Default = sanger', action='store')
+
+	(args, opts) = parser.parse_args()
+
+	if len(sys.argv) == 1 :
+		parser.print_help()
+		sys.exit(1)
+
+	if len(opts) != 2 :
+		parser.error("No input_file_name & output_file_name!")
+		sys.exit(1)
+
+	#print args
+	#print opts
+
+	return args, opts
+
+
+def PRINT_STR(inStr):
+
+        sys.stdout.write(inStr)
+        sys.stdout.flush()
+
+
+
+def FILTERING(fastq, args, opts):
+
+	ff_s = { 'sanger': [33,126], 'solexa': [59,126], 'illumina': [64,126] }
+
+	# min contig length
+	if args.min_ctg_length >= len(fastq[3]):
+		fastq[0] = ''
+		return fastq
+
+	# ignore reads where the average quality is below the cutoff
+	tmp_fastq = [0]*len(fastq[3])
+	for i in range(0, len(fastq[3])):
+		ascii_val = ord(fastq[3][i])
+		if ascii_val >= ff_s[args.fast_format][0] and ascii_val <= ff_s[args.fast_format][1]:
+			tmp_fastq[i] = ord(fastq[3][i]) - ff_s[args.fast_format][0] 
+		else:
+			print "Error : %s in %s is not the format of %s" % (fastq[3][i], opts[0], args.fast_format)
+			sys.exit(1)
+
+
+	score_sum = sum(tmp_fastq)
+	score_avg = score_sum / len(fastq[3])
+
+	# average_quality_score, or average within a window
+	if args.window_size == 0 :
+		if score_avg < args.avg_quality:
+			fastq[0] = ''
+			return fastq
+	else:
+		seq_len = len(fastq[3])
+		min_avg = -1
+		for i in range(0,seq_len):
+			if i+args.window_size > seq_len:
+				break
+			tmp_sum = sum(tmp_fastq[i:i+args.window_size])
+			tmp_avg = tmp_sum / args.window_size
+
+			if min_avg == -1 or min_avg > tmp_avg:
+				min_avg = tmp_avg
+
+		if min_avg < args.avg_quality:
+			fastq[0] = ''
+			return fastq
+
+	# trim_start
+	fastq[1] = fastq[1][args.trim_start:]
+	fastq[3] = fastq[3][args.trim_start:]
+
+	# trim_end
+	if args.trim_end != 0 :
+		fastq[1] = fastq[1][:-args.trim_end]
+		fastq[3] = fastq[3][:-args.trim_end]
+
+	return fastq
+ 
+
+def READ_IN_FILE(args, opts):
+
+	in_file  = opts[0]
+	out_file = opts[1]
+
+	if not os.path.exists(in_file):
+		print "Error : File not found (%s)\n" % (in_file)
+		sys.exit(1)
+	
+	PRINT_STR("=> Working...\n")
+	
+	fp     = open(in_file, "r")
+	fp_out = open(out_file, "w") 
+	flg    = False
+	fastq  = [ '', '', '', '']
+	total_reads = 0 
+	num_removed = 0
+	global_idx  = -1
+
+	for lineStr in fp:
+		lineStr = lineStr.strip()
+		if lineStr == "":
+			continue
+		
+		global_idx += 1
+		idx = global_idx % 4
+		total_reads += 1
+		
+		if idx == 0:
+			flg = True
+			fastq = [ lineStr.strip(), '', '+', '']
+			continue
+		if idx == 1:
+			fastq[idx] = lineStr
+		if idx == 3 :
+			fastq[idx] = lineStr
+			fastq = FILTERING(fastq, args, opts)
+			if fastq[0] != '':
+				fp_out.write("%s\n%s\n%s\n%s\n" % ( fastq[0].strip(), fastq[1].strip(), fastq[2].strip(), fastq[3].strip() ))
+			else:
+				num_removed += 1
+
+	PRINT_STR("   Total number of reads : %s\n" % (total_reads))
+	PRINT_STR("   Total number of removed reads : %s(%s%%)\n" % (num_removed, round( 100* (float(num_removed) / float(total_reads) ),2 )) )
+	
+
+if __name__ == '__main__':
+
+	args, opts = CHECK_OPTS()
+	READ_IN_FILE(args, opts)
+	PRINT_STR("   Done.")

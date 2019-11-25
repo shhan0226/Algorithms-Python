@@ -1,0 +1,50 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+# 작성자 : 한석현
+import sys
+import os
+import commands
+import optparse
+
+def check():
+	if len(sys.argv) <= 3:
+		print "======= <name option int input output> ========"
+		raise SystemExit(1)
+
+	argc = len(sys.argv)
+	for arg in sys.argv:
+		print arg
+	print sys.argv
+
+	option_check()
+
+def option_check():
+	opt = sys.argv[1]
+	opt_int = sys.argv[2]
+	if opt == '-l':
+		print "ok"
+		print type(opt_int)
+	
+	elif opt == '-s':
+		print "ok"
+	else:
+		print "option error"
+		sys.exit(1)
+	
+def read_file():
+	f = open(sys.argv[3], "r")
+	w = open(sys.argv[4], "w")
+	count =0
+	for line in f.readlines():
+		print "%s! %s" %(count, line)
+		count +=1
+		if count ==4:
+			break
+		w.write(line)
+	
+	f.close()
+	w.close()
+if __name__ == '__main__':
+	check()
+	read_file()

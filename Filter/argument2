@@ -1,0 +1,148 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+# 작성자 : 한석현
+import sys
+import os
+import commands
+import optparse
+
+def check():
+	if len(sys.argv) <= 3:
+		print "======= <name option int input output> ========"
+		raise SystemExit(1)
+	#명령 옵션 파서를 생성하고 optionpaser인스턴스 반환(도움말 보여줄 설명 문자열, 옵션전달 출력 문자열)
+	p = optparse.OptionParser(description="reserch", usage= "name option int intput output")
+
+	#인수를 받아들이는 옵션(옵션, 받아들이기, 옵션값저장속성, 옵션타입, 디폴트, 옵션도움말)
+	p.add_option("-l", action="store",dest="outfile1", type="int", default="0", help="min")
+	p.add_option("-s", action="store",dest="outfile2", type="int", default="0", help="start")
+	p.add_option("-e", action="store",dest="outfile3", type="int", default="0", help="end")
+	p.add_option("-w", action="store",dest="outfile4", type="int", default="0", help="window")
+	p.add_option("-a", action="store",dest="outfile5", type="int", default="0", help="avg")
+	p.add_option("-f", action="store",dest="outfile6", type="choice", choices=['sa', 'so','il'], default="sa", help="format")
+
+	#기본값 설정
+	p.set_defaults(debug=False)
+	
+	#명령줄을 파싱(opt는 옵션값 객체, args는 옵션이 아닌 항목 리스트)
+	opts, args = p.parse_args()
+
+
+	argc = len(sys.argv)
+	for arg in sys.argv:
+		print arg
+	print sys.argv
+
+	
+	print "opts = "
+	print opts
+	print "args = "
+	print args
+
+	option_min = opts.outfile1
+#	print option_num
+
+	option_start = opts.outfile2
+	option_end = opts.outfile3
+	option_window = opts.outfile4
+	option_avg = opts.outfile5
+	option_format = opts.outfile6
+
+	read_check(opts, args)
+	
+def read_check(opts, args):
+	print "1----------------------------------------"
+	print opts
+	print args
+	input_file = args[0]
+	print "2--------------------------------------"
+	output_file = args[1]	
+	try:
+		f = open(input_file, "r")
+	except IOError:
+		print "There is no %s file" %input_file
+		sys.exit(1)
+	w = open(output_file, "w")
+	
+	count = 0
+	remove = 0
+	total = 0
+	file_read = [ '', '', '', '']
+	
+	for file_line in f:
+		if file_line == "":
+			continue
+		total += 1	
+		if count == 0:
+			file_read = [file_line, '', '+', '']
+			count+=1
+			continue
+		
+		if count == 1:
+			file_read[count] = file_line
+			count+=1
+			continue
+
+		if count == 2:
+			count+=1
+			continue
+		
+		if count == 3:
+			count = 0
+			file_read[count] = file_line
+			file_read = option_check(file_read, opts, args)
+			if file_read[0] != "":
+				w.write("%s\n%s\n%s\n%s\n" %(file_read[0].strip(), file_read[1].strip(), file_read[2].strip(), file_read[3].strip()))
+			else:
+				remove +=1
+			
+	print "total %s"%total
+	print "remove %s"%remove
+	
+	w.close()
+	f.close()
+
+def option_check(file_read, opts, args):
+	read_count =len(file_read[3])
+
+	if option_min >= read_count:
+		file_read[0] = ''
+		return file_read
+	
+	r_list = [0 for i in range(read_count)]
+	
+	for i in range(0, read_count):
+		as_val = ord(file_read[3][i])
+	total_sum = sum(r_list)
+	total_avg = total_sum / rean_count
+
+	
+	if option_window == 0:
+		if total_avg < option_avg:
+			file_read[0] = ''
+			return file_read
+		else:
+			minimum = -1 #??
+			for i in range(0, read_count):
+				if i + option_window > read_count:
+					break
+				win_sum = sum(total_sum[i:i+option_window])
+				win_avg = win_sum / option_window
+				
+				if minimum > win_avg:
+					minimum = win_avg
+			if minimum < option_avg:
+				file_read[0] = ''
+				return file_read
+			
+	file_read[1] = file_read[1][option_start:]
+	file_read[3] = file_read[3][option_start:]
+	
+	if option_end !=0:
+		file_read[1] = file_read[1][:option_end]
+		file_read[3] = file_read[3][:option_end]
+	return file_read
+		
+if __name__ == '__main__':
+	check()
