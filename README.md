@@ -4,7 +4,7 @@
 Python을 이용한 다양한 알고리즘 구현
 <br>
 
-## Algorithms
+## Contents
 
 ### Basic
 * Python에서 기본적인 기능을 구현
