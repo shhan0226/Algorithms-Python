@@ -1,4 +1,4 @@
-# Algorithms-python
+# Python
 
 ## Introduction
 Python을 이용한 다양한 알고리즘 구현
