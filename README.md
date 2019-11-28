@@ -1,7 +1,7 @@
 # Python
 
 ## Introduction
-Python을 이용한 다양한 알고리즘 구현
+Python을 이용한 다양한 기능 및 알고리즘 구현
 <br>
 
 ## Contents
