@@ -5,6 +5,18 @@ Python을 이용한 다양한 기능 및 알고리즘 구현 예제
 
 <br>
 
+## Install
+* python3 
+```
+sudo apt install python3
+sudo update-alternatives --config python
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+```
+
+
+
+<br>
+
 ## Contents
 
 ### Basic
