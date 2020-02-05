@@ -33,4 +33,4 @@ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 ### Crawling
 * 웹크롤링 프로그램
 
-   * [파이썬 레시피 - 웹 활용 입문편]https://wikidocs.net/book/2965
+   * [파이썬 레시피 - 웹 활용 입문편] https://wikidocs.net/book/2965
