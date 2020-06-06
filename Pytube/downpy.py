@@ -3,6 +3,7 @@ from pytube import YouTube
 def download_(urllsit):
     urltag = "https://www.youtube.com/watch?v="
     for url_ in urllsit :
+        urlsum = ""
         print(urltag + url_)
         urlsum = YouTube(urltag + url_)
         urlstream = urlsum.streams.filter(progressive=True)
