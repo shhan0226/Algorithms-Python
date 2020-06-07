@@ -3,7 +3,7 @@ from pytube import Playlist
 from time import sleep
 
 def ldownload_():
-    pl = Playlist('https://www.youtube.com/watch?v=CGJDGYE-_3c&list=PL127T2Zu76Fs3QJ1DDbutbRub4oA998eD')
+    pl = Playlist('https://www.youtube.com/watch?v=m8kIsOgDpnk&list=PL127T2Zu76FtYKMJqhX4cE-kzGqR302_y')
     list = pl.video_urls
     url2 = ""
     for url2_ in list:
@@ -56,10 +56,10 @@ def file_():
 
 if __name__ == '__main__':
 
-#    str_ = file_()
-#    fdownload_(str_)
+    str_ = file_()
 
-    ldownload_()
+    fdownload_(str_)
+#ldownload_()
 
     print("end")
 
