@@ -2,8 +2,8 @@ from pytube import YouTube
 from pytube import Playlist
 from time import sleep
 
-def download2_():
-    pl = Playlist('https://www.youtube.com/watch?v=L3hz57whyNw&list=PL0oFI08O71gKjGhaWctTPvvM7_cVzsAtK')
+def ldownload_():
+    pl = Playlist('https://www.youtube.com/watch?v=CGJDGYE-_3c&list=PL127T2Zu76Fs3QJ1DDbutbRub4oA998eD')
     list = pl.video_urls
     url2 = ""
     for url2_ in list:
@@ -26,7 +26,7 @@ def download2_():
         url2 = urlsum = urlstream = ""
 
 
-def download_(urllsit):
+def fdownload_(urllsit):
     urltag = "https://www.youtube.com/watch?v="
     for url_ in urllsit :
         urlsum = ""
@@ -55,10 +55,11 @@ def file_():
     return urls
 
 if __name__ == '__main__':
-    str_ = file_()
-    download_(str_)
 
+#    str_ = file_()
+#    fdownload_(str_)
 
-#    download2_()
+    ldownload_()
+
     print("end")
 
