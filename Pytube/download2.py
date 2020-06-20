@@ -1,6 +1,7 @@
 from pytube import YouTube
 
 flag = "go"
+
 while flag != "no":
     urltag = "https://www.youtube.com/watch?v="
     s = input("url :")
@@ -19,6 +20,24 @@ while flag != "no":
 
     flag = input("go? no? :")
 
+
+
+"""
+# https://www.youtube.com/watch?v=auKdde7Anr8&list=PLlMkM4tgfjnJhhd4wn5aj8fVTYJwIpWkS
+# https://www.youtube.com/playlist?list=PLlMkM4tgfjnJhhd4wn5aj8fVTYJwIpWkS
+from pytube import Playlist
+
+pl = Playlist('https://www.youtube.com/watch?v=auKdde7Anr8&list=PLlMkM4tgfjnJhhd4wn5aj8fVTYJwIpWkS')
+
+list = pl.video_urls
+print("A")
+print(list)
+
+print(list)
+#pl.playlist_id()
+#pl.download_all()
+
+"""
 
 
 
