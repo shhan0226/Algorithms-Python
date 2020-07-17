@@ -1,12 +1,17 @@
 from pytube import YouTube
 from pytube import Playlist
-from time import sleep
+import re
+import os
 
 def ldownload_():
-    pl = Playlist('https://www.youtube.com/playlist?list=PLMsa_0kAjjrd8hYYCwbAuDsXZmHpqHvlV')
+    pl = Playlist("https://www.youtube.com/playlist?list=PLXziV1DL41ojhfghjtP_jrU03iYy0vJZe")
+    pl._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
+
+    count = 0
     list = pl.video_urls
-    url2 = ""
     for url2_ in list:
+        count = count + 1
+
         print(url2_)
         urlsum = YouTube(url2_)
         urlstream = urlsum.streams.filter(progressive=True)
@@ -22,6 +27,18 @@ def ldownload_():
 
         dir_ = "D:/VShare"
         urlstream[urlcount].download(dir_)
+
+        file_path = 'D:/VShare'
+        file_names = os.listdir(file_path)
+        print(file_names)
+
+        name="YouTube.mp4"
+        if name in file_names:
+            src = os.path.join(file_path, name)
+            dst = str(count) +'.mp4'
+            dst = os.path.join(file_path, dst)
+            os.rename(src, dst)
+
 
         url2 = urlsum = urlstream = ""
 
@@ -55,11 +72,12 @@ def file_():
     return urls
 
 if __name__ == '__main__':
+# ldownload_은 유튜브 리스트를 입력해 다운로드하고
+    ldownload_()
 
-    str_ = file_()
-
-    fdownload_(str_)
-#    ldownload_()
+# fdownload는 input파일에 유튜브 주소를 입력해 다운로드한다.
+#    str_ = file_()
+#    fdownload_(str_)
 
     print("end")
 

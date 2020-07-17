@@ -25,7 +25,7 @@ from pytube import YouTube
 #         break
 #
 #     url_ =input("주소를 입력(종료:x): ")
-url = YouTube('https://www.youtube.com/watch?v=bACXwJuVHyk&list=PLNfg4W25TapxLPYTYmZ7z-hWRSXNBzdrE&index=8')
+url = YouTube('https://www.youtube.com/watch?v=04V6_shtnpE')
 url2 = url.streams.filter(progressive=True)
 print(url.title)
 

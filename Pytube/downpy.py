@@ -1,5 +1,7 @@
 from pytube import YouTube
 
+# input 파일에 주소 입력해서 다운로드받으면 됨
+
 def download_(urllsit):
     urltag = "https://www.youtube.com/watch?v="
     for url_ in urllsit :
