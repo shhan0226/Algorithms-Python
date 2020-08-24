@@ -1,0 +1,14 @@
+One of the main challenges in cloud computing is an enormous amount of energy consumed in data-centers. Several
+researches have been conducted on Virtual Machine consolidation to optimize energy consumption. Among the
+proposed VM consolidations, OpenStack Neat is notable for its practicality. OpenStack Neat is an open-source
+consolidation framework that can seamlessly integrate to OpenStack, one of the most common and widely used
+opensource cloud management tool. The framework has components for deciding when to migrate VMs and for selecting
+suitable hosts for the VMs. The VM placement algorithm of OpenStack Neat is called MBFD. MBFD is based on a heuristic that handles only minimizing the number of servers. The heuristic is
+not only less energy efficient but also increases Service Level Agreement violation and consequently cause more
+VM migrations. To improve the energy efficiency, we propose VM placement algorithms based on both bin-packing
+heuristics and servers’ power efficiency. In addition, we introduce a new bin-packing heuristic called a Medium-Fit
+to reduce SLA violation. To evaluate performance of the proposed algorithms we have conducted experiments
+using CloudSim on three cloud data-center scenarios: homogeneous, heterogeneous and default. Workloads that run
+in the data-centers are generated from traces of PlanetLab and Bitbrains clouds. The results of the experiment show
+up-to 67% improvement in energy consumption and up-to 78% and 46% reduction in SLA violation and amount of
+VM migrations, respectively. Moreover, all improvements are statistically significant with significance level of 0.01.
