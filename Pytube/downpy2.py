@@ -28,7 +28,7 @@ def ldownload_():
         dir_ = "D:/VShare"
         urlstream[urlcount].download(dir_)
 
-        file_path = 'D:/VShare'
+        file_path = 'D:/ShareDir'
         file_names = os.listdir(file_path)
         print(file_names)
 
@@ -57,7 +57,7 @@ def fdownload_(urllsit):
             urlcount += 1
             print(i, '.', urlstream[i])
 
-        dir_ = "D:/VShare"
+        dir_ = "D:/ShareDir"
         urlstream[urlcount].download(dir_)
 
 def file_():
@@ -73,11 +73,11 @@ def file_():
 
 if __name__ == '__main__':
 # ldownload_은 유튜브 리스트를 입력해 다운로드하고
-    ldownload_()
+#    ldownload_()
 
 # fdownload는 input파일에 유튜브 주소를 입력해 다운로드한다.
-#    str_ = file_()
-#    fdownload_(str_)
+    str_ = file_()
+    fdownload_(str_)
 
     print("end")
 
