@@ -7,7 +7,6 @@ def ldownload_():
     pl = Playlist("https://www.youtube.com/playlist?list=PLKHcFf5kmB6h3bbs8pLvXFZBGTU0Ns0Ep")
     pl._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
 
-
     count = 0
     list = pl.video_urls
     for url2_ in list:
