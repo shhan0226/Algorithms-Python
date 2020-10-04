@@ -4,8 +4,9 @@ import re
 import os
 
 def ldownload_():
-    pl = Playlist("https://www.youtube.com/playlist?list=PLXziV1DL41ojhfghjtP_jrU03iYy0vJZe")
+    pl = Playlist("https://www.youtube.com/playlist?list=PLKHcFf5kmB6h3bbs8pLvXFZBGTU0Ns0Ep")
     pl._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
+
 
     count = 0
     list = pl.video_urls
@@ -24,23 +25,13 @@ def ldownload_():
         for i in range(len(urlstream)):
             urlcount += 1
             print(i, '.', urlstream[i])
+        print("index =", urlcount)
 
         dir_ = "D:/VShare"
         urlstream[urlcount].download(dir_)
-
-        file_path = 'D:/ShareDir'
-        file_names = os.listdir(file_path)
-        print(file_names)
-
-        name="YouTube.mp4"
-        if name in file_names:
-            src = os.path.join(file_path, name)
-            dst = str(count) +'.mp4'
-            dst = os.path.join(file_path, dst)
-            os.rename(src, dst)
+        url2_=""
 
 
-        url2 = urlsum = urlstream = ""
 
 
 def fdownload_(urllsit):
@@ -73,11 +64,11 @@ def file_():
 
 if __name__ == '__main__':
 # ldownload_은 유튜브 리스트를 입력해 다운로드하고
-#    ldownload_()
+    ldownload_()
 
 # fdownload는 input파일에 유튜브 주소를 입력해 다운로드한다.
-    str_ = file_()
-    fdownload_(str_)
+#    str_ = file_()
+#    fdownload_(str_)
 
     print("end")
 
