@@ -4,7 +4,7 @@ import re
 import os
 
 def ldownload_():
-    pl = Playlist("https://www.youtube.com/playlist?list=PLKHcFf5kmB6h3bbs8pLvXFZBGTU0Ns0Ep")
+    pl = Playlist("https://www.youtube.com/playlist?list=PLXe1xUfF_4Dl_Pyr33z8rMkEgVuOb9wVt")
     pl._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
 
     count = 0
@@ -26,9 +26,9 @@ def ldownload_():
             print(i, '.', urlstream[i])
         print("index =", urlcount)
 
-        dir_ = "D:/VShare"
+        dir_ = "D:/ShareDir"
         urlstream[urlcount].download(dir_)
-        url2_=""
+        url2_ = ""
 
 
 
@@ -63,11 +63,11 @@ def file_():
 
 if __name__ == '__main__':
 # ldownload_은 유튜브 리스트를 입력해 다운로드하고
-    ldownload_()
+#    ldownload_()
 
 # fdownload는 input파일에 유튜브 주소를 입력해 다운로드한다.
-#    str_ = file_()
-#    fdownload_(str_)
+    str_ = file_()
+    fdownload_(str_)
 
     print("end")
 
