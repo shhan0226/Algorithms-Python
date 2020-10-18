@@ -6,8 +6,6 @@ import re
 import sys
 import math
 import bisect
-
-
 from typing import *
 
 
