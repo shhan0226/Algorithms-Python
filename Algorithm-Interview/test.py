@@ -39,4 +39,29 @@ if __name__ == '__main__':
 
     #re.sub('패턴', 교체함수, '문자열', 바꿀횟수)
 
+    nums = [0, 1, 0, 1]
 
+    bin_num = collections.defaultdict(list)
+    ex_num = {}
+
+    su: int
+    result =[]
+
+    #
+    for i, num in enumerate(nums):
+        ex_num[i] = num
+        bin_num[i] = bin(num).count('1')
+
+    bin_num = sorted(bin_num.items(), key=lambda x: x[1])
+    print(bin_num)
+
+    for tu in bin_num:
+        result.append(nums[ list(tu)[0]])
+        print(nums[list(tu)[0]])
+
+    print(result)
+
+
+
+    # for key, val in bin_num.items():
+    #     print(num[key])
