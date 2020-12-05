@@ -35,11 +35,14 @@ def ldownload_():
 
 def fdownload_(urllsit):
     urltag = "https://www.youtube.com/watch?v="
+
     for url_ in urllsit :
         urlsum = ""
         print(urltag + url_)
+
         urlsum = YouTube(urltag + url_)
         urlstream = urlsum.streams.filter(progressive=True)
+
         print("Title : " + urlsum.title)
 
         urlcount = -1
@@ -59,6 +62,7 @@ def file_():
         url_ = strs[1]
         urls.append(url_)
     f.close()
+    print(urls)
     return urls
 
 if __name__ == '__main__':

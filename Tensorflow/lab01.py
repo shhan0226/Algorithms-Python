@@ -2,6 +2,10 @@
 # import os
 # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+##########################################################
+# v1
+#
+
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
@@ -17,6 +21,8 @@ print("sess.run(node1, node2): ", sess.run([node1, node2]))
 print("sess.run(node3): ", sess.run(node3))
 
 ##########################################################
+# v2
+#
 
 
 node1 = tf.constant(3.0, tf.float32)
