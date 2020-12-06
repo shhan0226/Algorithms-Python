@@ -1,4 +1,5 @@
 # Lab 3-1 Minimizing Cost
+
 # import tensorflow as tf
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
