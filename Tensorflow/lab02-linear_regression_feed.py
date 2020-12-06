@@ -29,11 +29,17 @@ with tf.Session() as sess:
 
     # Fit the line
     for step in range(2001):
+        # _ = train,
+        # cost_val = cont,
+        # W_val = W,
+        # b_val = b
         _, cost_val, W_val, b_val = sess.run(
             [train, cost, W, b], feed_dict={X: [1, 2, 3], Y: [1, 2, 3]}
         )
         if step % 20 == 0:
             print(step, cost_val, W_val, b_val)
+
+
 
     # Testing our model
     print(sess.run(hypothesis, feed_dict={X: [5]}))
@@ -47,6 +53,7 @@ with tf.Session() as sess:
     ...
     1980 1.3360998e-05 [1.0042454] [-0.00965055]
     2000 1.21343355e-05 [1.0040458] [-0.00919707]
+    
     [5.0110054]
     [2.500915]
     [1.4968792 3.5049512]
