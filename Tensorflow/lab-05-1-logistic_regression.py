@@ -39,6 +39,7 @@ train = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
 # Accuracy computation
 # True if hypothesis>0.5 else False
 predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)
+
 ######                           예측 값과, 실제 값이 같은지 확인해 평균내기
 accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, Y), dtype=tf.float32))
 
