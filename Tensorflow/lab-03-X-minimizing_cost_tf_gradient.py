@@ -15,6 +15,8 @@ W = tf.Variable(5.)
 hypothesis = X * W
 
 # Manual gradient
+#####
+# 수식적으로 계산한 그레디언트
 gradient = tf.reduce_mean((W * X - Y) * X) * 2
 
 # cost/loss function
@@ -24,6 +26,8 @@ cost = tf.reduce_mean(tf.square(hypothesis - Y))
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 
 # Get gradients
+#####
+# 텐서가 계산한 그레디언트
 gvs = optimizer.compute_gradients(cost)
 
 # Optional: modify gradient if necessary
@@ -31,6 +35,15 @@ gvs = optimizer.compute_gradients(cost)
 
 # Apply gradients
 apply_gradients = optimizer.apply_gradients(gvs)
+
+
+'''
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(100):
+    print(step, sess.run([gradient, W, gvs]))
+    sess.run(apply_gradients)
+'''
 
 # Launch the graph in a session.
 with tf.Session() as sess:
@@ -40,3 +53,5 @@ with tf.Session() as sess:
     for step in range(101):
         gradient_val, gvs_val, _ = sess.run([gradient, gvs, apply_gradients])
         print(step, gradient_val, gvs_val)
+
+

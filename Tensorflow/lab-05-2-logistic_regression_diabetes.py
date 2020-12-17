@@ -1,9 +1,15 @@
 # Lab 5 Logistic Regression Classifier
 import tensorflow as tf
 import numpy as np
+
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 tf.set_random_seed(777)  # for reproducibility
 
-xy = np.loadtxt('data-03-diabetes.csv', delimiter=',', dtype=np.float32)
+##### 질병 분류
+# 당료병 데이터
+xy = np.loadtxt('data/data-03-diabetes.csv', delimiter=',', dtype=np.float32)
 x_data = xy[:, 0:-1]
 y_data = xy[:, [-1]]
 

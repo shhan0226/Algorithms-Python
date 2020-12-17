@@ -28,6 +28,14 @@ gradient = tf.reduce_mean((W * X - Y) * X)
 descent = W - learning_rate * gradient
 update = W.assign(descent)
 
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(21):
+    sess.run(update, feed_dict={X: x_data, Y: y_data})
+    print(step, sess.run(cost, feed_dict={X: x_data, Y: y_data}), sess.run(W))
+
+'''
 # Launch the graph in a session.
 with tf.Session() as sess:
     # Initializes global variables in the graph.
@@ -38,3 +46,4 @@ with tf.Session() as sess:
             [update, cost, W], feed_dict={X: x_data, Y: y_data}
         )
         print(step, cost_val, W_val)
+'''

@@ -1,5 +1,8 @@
 # Lab 5 Logistic Regression Classifier
-import tensorflow as tf
+
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 tf.set_random_seed(777)  # for reproducibility
 
 x_data = [[1, 2],
@@ -19,6 +22,7 @@ y_data = [[0],
 X = tf.placeholder(tf.float32, shape=[None, 2])
 Y = tf.placeholder(tf.float32, shape=[None, 1])
 
+#                         [ X갯수(입력), Y개수(나가는 갯수) ]
 W = tf.Variable(tf.random_normal([2, 1]), name='weight')
 b = tf.Variable(tf.random_normal([1]), name='bias')
 
@@ -31,9 +35,11 @@ cost = -tf.reduce_mean(Y * tf.log(hypothesis) + (1 - Y) *
 
 train = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
 
+
 # Accuracy computation
 # True if hypothesis>0.5 else False
 predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)
+######                           예측 값과, 실제 값이 같은지 확인해 평균내기
 accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, Y), dtype=tf.float32))
 
 # Launch graph
@@ -41,6 +47,8 @@ with tf.Session() as sess:
     # Initialize TensorFlow variables
     sess.run(tf.global_variables_initializer())
 
+    ######
+    # 학습하기
     for step in range(10001):
         cost_val, _ = sess.run([cost, train], feed_dict={X: x_data, Y: y_data})
         if step % 200 == 0:

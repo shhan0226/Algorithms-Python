@@ -1,5 +1,13 @@
 # Lab 6 Softmax Classifier
-import tensorflow as tf
+
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
+#####
+# 로지스틱은 바이너리 분류만 가능
+# 더 많은 분류일 경우에는 소프트맥스를 사용한다.
+
 tf.set_random_seed(777)  # for reproducibility
 
 x_data = [[1, 2, 1, 1],
@@ -28,6 +36,8 @@ b = tf.Variable(tf.random_normal([nb_classes]), name='bias')
 
 # tf.nn.softmax computes softmax activations
 # softmax = exp(logits) / reduce_sum(exp(logits), dim)
+#####
+# 로짓이 스코어와 같다.
 hypothesis = tf.nn.softmax(tf.matmul(X, W) + b)
 
 # Cross entropy cost/loss
@@ -75,6 +85,8 @@ with tf.Session() as sess:
 1800 0.16359556
 2000 0.15216158
 -------------
+#####
+#   0              1                 2       
 [[1.3890490e-03 9.9860185e-01 9.0613084e-06]] [1]
 -------------
 [[0.9311919  0.06290216 0.00590591]] [0]

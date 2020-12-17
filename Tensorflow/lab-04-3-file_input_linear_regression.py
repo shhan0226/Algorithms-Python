@@ -6,7 +6,9 @@ tf.disable_v2_behavior()
 import numpy as np
 tf.set_random_seed(777)  # for reproducibility
 
-xy = np.loadtxt('data-01-test-score.csv', delimiter=',', dtype=np.float32)
+#####
+# ':'는 n개(열) 전체
+xy = np.loadtxt('data/data-01-test-score.csv', delimiter=',', dtype=np.float32)
 x_data = xy[:, 0:-1]
 y_data = xy[:, [-1]]
 
@@ -57,3 +59,12 @@ for step in range(2001):
                                    feed_dict={X: x_data, Y: y_data})
     if step % 10 == 0:
         print(step, "Cost:", cost_val, "\nPrediction:\n", hy_val)
+
+
+
+# Ask my score
+print("Your score will be ",
+      sess.run(hypothesis, feed_dict={X: [[100, 70, 101]]}))
+
+print("Other scores will be ",
+      sess.run(hypothesis, feed_dict={X: [[60, 70, 110], [90, 100, 80]]}))
